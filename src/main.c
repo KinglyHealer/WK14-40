@@ -4,6 +4,7 @@
 int main(void)
 {
     system("chcp 65001 >nul");
+    log_init();
 
     char names[MAX_STU_NUM][NAME_LEN];
     int scores[MAX_STU_NUM];
@@ -16,5 +17,6 @@ int main(void)
     sort_students(names, scores, n);
     print_results(names, scores, n, avg, max, min);
 
+    log_close();
     return 0;
 }

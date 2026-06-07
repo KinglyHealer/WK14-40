@@ -1,15 +1,48 @@
 #include "student.h"
 #include <string.h>
 
+// ========== 日志系统：同时输出到控制台和日志文件 ==========
+static FILE *g_logfile = NULL;
+
+void log_init(void)
+{
+    g_logfile = fopen("output/run_result.txt", "w");
+    /* 打开失败不影响程序运行，仅跳过日志写入 */
+}
+
+void log_close(void)
+{
+    if (g_logfile)
+    {
+        fclose(g_logfile);
+        g_logfile = NULL;
+    }
+}
+
+void tee_printf(const char *fmt, ...)
+{
+    va_list args1, args2;
+    va_start(args1, fmt);
+    va_copy(args2, args1);
+    vprintf(fmt, args1);
+    if (g_logfile)
+    {
+        vfprintf(g_logfile, fmt, args2);
+        fflush(g_logfile);  /* 实时刷新，确保日志不丢失 */
+    }
+    va_end(args2);
+    va_end(args1);
+}
+
 // 输入校验学生人数
 int input_student_count(void)
 {
     int n;
-    printf("请输入学生人数: ");
+    tee_printf("请输入学生人数: ");
     scanf("%d", &n);
     while (n <= 0 || n > MAX_STU_NUM)
     {
-        printf("人数不合法，请重新输入(1-%d): ", MAX_STU_NUM);
+        tee_printf("人数不合法，请重新输入(1-%d): ", MAX_STU_NUM);
         scanf("%d", &n);
     }
     return n;
@@ -20,13 +53,13 @@ void input_student_info(char names[][NAME_LEN], int scores[], int n)
 {
     for (int i = 0; i < n; i++)
     {
-        printf("请输入第%d个学生的姓名: ", i + 1);
+        tee_printf("请输入第%d个学生的姓名: ", i + 1);
         scanf("%s", names[i]);
-        printf("请输入第%d个学生的成绩: ", i + 1);
+        tee_printf("请输入第%d个学生的成绩: ", i + 1);
         scanf("%d", &scores[i]);
         while (scores[i] < SCORE_MIN || scores[i] > SCORE_MAX)
         {
-            printf("成绩不合法，请重新输入(%d-%d): ", SCORE_MIN, SCORE_MAX);
+            tee_printf("成绩不合法，请重新输入(%d-%d): ", SCORE_MIN, SCORE_MAX);
             scanf("%d", &scores[i]);
         }
     }
@@ -76,13 +109,13 @@ void sort_students(char names[][NAME_LEN], int scores[], int n)
 // 打印统计数据+排名
 void print_results(char names[][NAME_LEN], int scores[], int n, float avg, int max, int min)
 {
-    printf("\n===== 成绩统计结果 =====\n");
-    printf("平均分: %.2f\n", avg);
-    printf("最高分: %d\n", max);
-    printf("最低分: %d\n", min);
-    printf("\n成绩排名:\n");
+    tee_printf("\n===== 成绩统计结果 =====\n");
+    tee_printf("平均分: %.2f\n", avg);
+    tee_printf("最高分: %d\n", max);
+    tee_printf("最低分: %d\n", min);
+    tee_printf("\n成绩排名:\n");
     for (int i = 0; i < n; i++)
     {
-        printf("%d. %s: %d分\n", i + 1, names[i], scores[i]);
+        tee_printf("%d. %s: %d分\n", i + 1, names[i], scores[i]);
     }
 }
