@@ -1,0 +1,30 @@
+# --- 编译生成产物 ---
+*.o
+*.out
+app.out
+*.exe
+
+# --- Python 相关 ---
+# 虚拟环境 (覆盖常见命名)
+.venv/
+venv/
+env/
+ENV/
+
+# Python 缓存与字节码
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Jupyter Notebook 检查点
+.ipynb_checkpoints/
+
+# --- 系统临时文件 ---
+.DS_Store
+Thumbs.db
+
+# --- 项目特定 ---
+.claude/
+assets/
