@@ -1,5 +1,7 @@
 @echo off
 chcp 65001 >nul
+@echo off
+chcp 65001 >nul
 :: Student Grade Management - One-Click Build & Run V2.0
 
 :: Create output directory if not exists
