@@ -28,3 +28,12 @@ Thumbs.db
 # --- 项目特定 ---
 .claude/
 assets/
+
+# --- 图片文件 ---
+*.png
+*.jpg
+*.jpeg
+*.gif
+
+# --- 输出产物 ---
+output/
